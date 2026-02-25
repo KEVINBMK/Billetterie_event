@@ -1,0 +1,23 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "billetterieevent-a023d",
+          "appId": "1:30607756645:android:458a72b3bf9a914243658c",
+          "fileOutput": "android/app/google-services.json"
+        }
+      }
+    }
+  },
+  "hosting": {
+    "public": "build/web",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**", "apk/**"],
+    "headers": [
+      {
+        "source": "/apk/**",
+        "headers": [{ "key": "Content-Disposition", "value": "attachment" }]
+      }
+    ]
+  }
+}

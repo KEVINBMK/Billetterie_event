@@ -44,12 +44,10 @@ Selon le temps du projet, des fonctionnalités bonus pourront être ajoutées (s
 
 - **Langage** : Dart
 - **Framework** : Flutter
-- **Plateformes cibles** : Android (via Android Studio), éventuellement iOS si le temps le permet.
-- **Gestion d’état** : à définir (ex. Provider / Riverpod / Bloc).
-- **Persistance des données** :
-  - Pour le cours : soit API mockée, soit base locale (ex. sqflite) selon les consignes.
-
-Les choix exacts pourront être précisés plus tard dans ce fichier.
+- **Backend** : Firebase (Auth, Firestore)
+- **Plateformes** : Android, **Web**, iOS si besoin.
+- **Gestion d’état** : Provider
+- **Thème** : LikitaEvent (bleu / rouge / fond crème)
 
 ---
 
@@ -91,9 +89,23 @@ flutter pub get
 
 4. **Lancer l’application**
 
+- **Android / iOS** :
 ```bash
 flutter run
 ```
+
+- **Web** (navigateur) :
+```bash
+flutter run -d chrome
+```
+
+5. **Build production Web**
+
+```bash
+flutter build web
+```
+
+Les fichiers générés sont dans `build/web/`. Tu peux les héberger sur Firebase Hosting, GitHub Pages, etc.
 
 ---
 
