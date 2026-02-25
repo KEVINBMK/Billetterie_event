@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "30607756645",
+    "project_id": "billetterieevent-a023d",
+    "storage_bucket": "billetterieevent-a023d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:30607756645:android:458a72b3bf9a914243658c",
+        "android_client_info": {
+          "package_name": "com.example.billetterie_event"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "30607756645-hkjpq1adber3lrutrob6bv0l4c3h53ui.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.billetterie_event",
+            "certificate_hash": "7024758842b7cd2026d50738d09b39c38906ccf0"
+          }
+        },
+        {
+          "client_id": "30607756645-jhucfdn2pf40nirdv7aodq63o27oupv2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5bYjB3SJ_i64hqXNzNLEHFsTzMgtx_yc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "30607756645-jhucfdn2pf40nirdv7aodq63o27oupv2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "30607756645-91raca8l4nho1c2dec05cr074ej9ptrs.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.billetterieEvent"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
