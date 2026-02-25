@@ -1,11 +1,12 @@
+// lib/main.dart
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'controllers/auth_controller.dart';
 import 'controllers/event_controller.dart';
 import 'controllers/reservation_controller.dart';
-import 'views/public/home_screen.dart';
-import 'firebase_options.dart'; 
+import 'firebase_options.dart';
+import 'views/main_screen.dart'; // Import du nouvel écran
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Billetterie',
-        home: TestAuthScreen(), // Pour tester, à changer plus tard
+        home: MainScreen(), // Point d'entrée unique
       ),
     );
   }
