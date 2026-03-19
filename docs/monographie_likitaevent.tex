@@ -1,0 +1,266 @@
+\documentclass[11pt,a4paper,oneside]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{mathptmx}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{courier}
+
+\usepackage[a4paper,margin=2.5cm]{geometry}
+\setlength{\headheight}{14pt}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{indentfirst}
+\setlength{\parindent}{1.25em}
+\setlength{\parskip}{0.5em}
+\usepackage{ragged2e}
+\setlength{\emergencystretch}{1.5em}
+
+\usepackage{graphicx}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{listings}
+\usepackage{url}
+\usepackage{xcolor}
+
+\hypersetup{colorlinks=true, linkcolor=blue, urlcolor=blue, pdftitle={Monographie LikitaEvent}, pdfauthor={Équipe LikitaEvent}}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{LikitaEvent}
+\fancyhead[R]{Monographie}
+\fancyfoot[C]{\thepage}
+
+\lstset{basicstyle=\ttfamily\footnotesize, breaklines=true, frame=single}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+
+% Espace après les titres pour la lisibilité
+\titlespacing{\section}{0pt}{1.2em plus 0.3em minus 0.2em}{0.6em plus 0.2em}
+\titlespacing{\subsection}{0pt}{0.9em plus 0.2em minus 0.1em}{0.4em plus 0.15em}
+
+\begin{document}
+
+% ========== PAGE DE GARDE (format classique) ==========
+\begin{titlepage}
+\centering
+\vspace*{0.8cm}
+\includegraphics[width=2.5cm]{WhatsApp Image 2026-03-18 at 22.40.20.jpeg}\\[0.35cm]
+{\Large \textbf{RÉPUBLIQUE DÉMOCRATIQUE DU CONGO}}\\[0.2cm]
+{\large Ministère de l'Enseignement Supérieur et Universitaire}\\[0.2cm]
+{\large \textbf{Université Protestante au Congo}}\\[0.2cm]
+{\large Faculté des Sciences Informatiques}\\[1cm]
+\HRule \\[0.3cm]
+{\LARGE \bfseries MONOGRAPHIE DU PROJET}\\[0.3cm]
+{\Large \bfseries LikitaEvent -- Billetterie événementielle}\\[0.3cm]
+\HRule \\[1cm]
+{\large Travail réalisé dans le cadre du cours de \textbf{Programmation mobile}}\\[0.2cm]
+{\large Niveau : \textbf{L4 LMD}}\\[0.8cm]
+\begin{flushleft}
+\textbf{Membres de l'équipe :}\\[0.4em]
+Kevin -- Lead technique / Architecture\\[0.25em]
+Melvin -- Back-end \& Services\\[0.25em]
+Jonathan -- Front-end Participant\\[0.25em]
+Dieuvie -- Front-end Organisateur / Admin\\[0.25em]
+Chris -- UX/UI \& Tests
+\end{flushleft}
+\vfill
+\textbf{Année académique :} 2025--2026
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+% ========== REMERCIEMENTS ==========
+\section*{Remerciements}
+\addcontentsline{toc}{section}{Remerciements}
+
+Nous tenons à remercier Dieu pour la grâce et la force qu'Il nous a données tout au long de ce projet. Merci aussi à chaque membre du groupe : sans la confiance et le travail de chacun, LikitaEvent n'aurait pas pu voir le jour. Nous avons travaillé ensemble en autonomie dans le cadre du cours de Programmation mobile à l'Université Protestante au Congo, et cette aventure nous a beaucoup appris sur le développement d'application et le travail en équipe.
+
+% ========== RÉSUMÉ ==========
+\section*{Résumé}
+\addcontentsline{toc}{section}{Résumé}
+
+Cette monographie présente \textbf{LikitaEvent}, une application de billetterie événementielle conçue et réalisée en L4 LMD à l'Université Protestante au Congo, dans le cadre du cours de Programmation mobile. L'objectif est de proposer un outil simple : permettre aux utilisateurs de consulter les événements et d'acheter des billets, et aux organisateurs de créer des événements, suivre les ventes et contrôler l'entrée en scannant les billets.
+
+Côté technique, nous avons utilisé \textbf{Flutter} (Dart), \textbf{Firebase} pour l'authentification et la base de données, \textbf{Provider} pour la gestion d'état, \textbf{GoRouter} pour la navigation, et l'API \textbf{Labyrinthe RDC} pour le paiement Mobile Money en USD. L'application tourne sur le web et sur Android ; chaque billet est associé à un QR code que l'organisateur peut vérifier à l'entrée. Ce document décrit le contexte, l'équipe, les choix techniques, l'architecture, les fonctionnalités, le déploiement, les difficultés rencontrées et les perspectives d'amélioration.
+
+\textbf{Mots-clés :} Flutter, Firebase, billetterie, QR code, Mobile Money, programmation mobile, UPC.
+
+% ========== INTRODUCTION ==========
+\section{Introduction}
+\label{sec:intro}
+
+Aujourd'hui, de plus en plus d'événements se gèrent en ligne : annonces, réservations, paiement des billets. Pourtant, dans beaucoup de situations, on en est encore au papier, aux listes Excel ou à des outils peu adaptés. La diffusion des informations reste limitée, la vente de billets est compliquée, et le jour J, le contrôle à l'entrée peut tourner au casse-tête. C'est à partir de ce constat que nous avons voulu proposer une solution simple et centralisée.
+
+\textbf{LikitaEvent} est le nom que nous avons donné à notre application. L'idée : une plateforme où les utilisateurs peuvent découvrir des événements et acheter leurs billets, et où les organisateurs peuvent tout gérer depuis un tableau de bord, y compris vérifier les billets à l'entrée avec un scan QR. Nous l'avons développée dans le cadre du cours de Programmation mobile (L4 LMD) à l'Université Protestante au Congo, en respectant les contraintes du projet : Firebase, Provider et une API externe pour le paiement. Tout a été fait en groupe, en autonomie. Pour nous, c'était l'occasion de mettre en pratique ce qu'on avait vu en cours : architecture d'application, gestion d'état, intégration d'API.
+
+Ce document est organisé en six parties. La section~\ref{sec:presentation} présente le projet et les objectifs. La section~\ref{sec:equipe} décrit l'organisation de l'équipe. La section~\ref{sec:technique} détaille les choix techniques et l'architecture. La section~\ref{sec:fonctionnalites} développe les fonctionnalités principales. La section~\ref{sec:deploiement} traite du déploiement, des difficultés et des perspectives. Une conclusion clôt le tout.
+
+% ========== 1. PRÉSENTATION ET OBJECTIFS ==========
+\section{Présentation du projet et objectifs}
+\label{sec:presentation}
+
+\subsection{Contexte}
+
+LikitaEvent est né dans le cadre du cours de Programmation mobile que nous suivons en L4 LMD à l'Université Protestante au Congo (UPC). Nous voulions une application de billetterie événementielle à la fois pour les participants (consulter les événements, acheter des billets) et pour les organisateurs (créer des événements, suivre les ventes, contrôler l'entrée). L'objectif était de centraliser tout cela dans un seul outil numérique, utilisable sur le web et sur smartphone Android.
+
+\subsection{Problématique}
+
+Sur le terrain, nous avons constaté plusieurs problèmes : les informations sur les événements circulent mal, il n'existe pas toujours de système fiable pour réserver ou payer en ligne, et le contrôle à l'entrée se fait encore souvent à la main, ce qui peut créer des erreurs ou des abus. Les organisateurs manquent aussi d'outils pour suivre leurs ventes en temps réel. D'où l'idée de proposer une plateforme qui regroupe tout et qui automatise au maximum les étapes de la billetterie, de la découverte à la vérification du billet.
+
+\subsection{Objectifs}
+
+Les objectifs de LikitaEvent sont les suivants : (1) permettre aux utilisateurs de consulter les événements disponibles et d'acheter ou réserver des billets de manière simple ; (2) offrir aux organisateurs un espace de gestion complet (création, modification, suppression d'événements, suivi des ventes) ; (3) sécuriser le contrôle d'accès grâce à un système de scan des billets (QR code), utilisable sur le web et sur Android. Nous souhaitions également respecter les contraintes académiques du cours.
+
+\subsection{Contraintes techniques}
+
+Le projet devait respecter les contraintes imposées dans le cadre du cours de Programmation mobile : utilisation de \textbf{Firebase Authentication} pour l'authentification ; utilisation de \textbf{Cloud Firestore} comme base de données ; utilisation de \textbf{Provider} pour la gestion d'état ; intégration d'une \textbf{API externe} pour le paiement, à savoir \textbf{Labyrinthe RDC} (Mobile Money, montants en USD dans notre implémentation).
+
+% ========== 2. ÉQUIPE ET MÉTHODOLOGIE ==========
+\section{Organisation de l'équipe}
+\label{sec:equipe}
+
+\subsection{Composition de l'équipe}
+
+Nous sommes cinq dans l'équipe. Dès le début, nous avons défini qui s'occupait de quoi pour éviter les doublons et avancer efficacement. Chacun avait un rôle précis. Le projet a été mené en autonomie dans le cadre du cours de Programmation mobile (L4 LMD) à l'Université Protestante au Congo.
+
+\begin{table}[H]
+\centering
+\caption{Répartition des rôles}
+\begin{tabularx}{\textwidth}{|l|l|X|}
+\hline
+\textbf{Membre} & \textbf{Rôle} & \textbf{Responsabilités principales} \\
+\hline
+Kevin & Lead technique / Architecture & Structure du projet, intégration globale, routes (\texttt{app\_router.dart}), config Android/web, déploiement Firebase Hosting, dépôt Git \\
+\hline
+Melvin & Back-end \& Services & Services Firebase (auth, Firestore, Labyrinthe), modèles (Event, Ticket, LikitaUser), état (\texttt{AuthState}) \\
+\hline
+Jonathan & Front-end Participant & Liste et détail des événements, formulaire d'achat (checkout), écran « Mes billets », affichage du billet avec QR code, page d'accueil \\
+\hline
+Dieuvie & Front-end Organisateur / Admin & Tableau de bord organisateur, formulaire de création/édition d'événement, écran de scan des billets (web + Android) \\
+\hline
+Chris & UX/UI \& Tests & Thème (couleurs, typo), composants réutilisables (AppBar, barre de navigation, scaffold responsive), écrans de connexion et d'inscription, maquettes (\texttt{docs/}) \\
+\hline
+\end{tabularx}
+\end{table}
+
+\subsection{Répartition technique des tâches}
+
+\textbf{Kevin} a principalement travaillé sur \texttt{lib/main.dart}, \texttt{lib/app\_router.dart}, \texttt{lib/core/constants/}, la configuration des dossiers \texttt{android/} et \texttt{web/}, ainsi que \texttt{firebase.json} et le déploiement.
+
+\textbf{Melvin} a pris en charge \texttt{lib/core/services/} (firebase\_auth\_service, firestore\_service, labyrinthe\_payment\_service), \texttt{lib/core/state/auth\_state.dart} et \texttt{lib/core/models/} (event, ticket, likita\_user).
+
+\textbf{Jonathan} a développé les dossiers \texttt{lib/features/events/} (liste, détail, checkout) et \texttt{lib/features/tickets/} (mes billets, affichage du billet avec QR), ainsi que \texttt{lib/features/home/}.
+
+\textbf{Dieuvie} s'est chargé de \texttt{lib/features/dashboard/} (tableau de bord, formulaire événement, scan des billets).
+
+\textbf{Chris} a travaillé sur \texttt{lib/core/theme/likita\_theme.dart}, \texttt{lib/core/widgets/} (likita\_app\_bar, likita\_nav\_bar, responsive\_scaffold) et \texttt{lib/features/auth/login\_register\_screens.dart}.
+
+\subsection{Méthodologie de travail}
+
+Nous avons réparti les tâches en fonction des rôles de chacun, tout en restant en contact pour les points d'intégration et les décisions importantes. Chacun avait son périmètre, mais on se concertait dès qu'il fallait faire le lien entre les parties (par exemple entre le formulaire d'achat et le service de paiement, ou entre les routes et les rôles). Nous avons utilisé GitHub pour versionner le code et fusionner nos contributions. Le projet a été réalisé en autonomie, dans le respect des délais et des contraintes du cours.
+
+% ========== 3. TECHNIQUES ET ARCHITECTURE ==========
+\section{Choix techniques et architecture}
+\label{sec:technique}
+
+\subsection{Technologies utilisées}
+
+Le tableau ci-dessous résume la stack technique du projet.
+
+\begin{table}[H]
+\centering
+\caption{Stack technique}
+\begin{tabularx}{\textwidth}{|l|X|}
+\hline
+\textbf{Technologie} & \textbf{Utilisation} \\
+\hline
+Dart / Flutter & Langage et framework pour l'application mobile et web \\
+\hline
+Firebase Authentication & Connexion et inscription (email + mot de passe) \\
+\hline
+Cloud Firestore & Base de données (événements, réservations, utilisateurs) \\
+\hline
+Provider & Gestion d'état (utilisateur connecté, rôle) \\
+\hline
+GoRouter & Navigation et protection des routes (dashboard réservé aux organisateurs et admins) \\
+\hline
+Labyrinthe RDC API & Paiement en ligne (Mobile Money, USD) \\
+\hline
+qr\_flutter & Génération du QR code affiché sur chaque billet \\
+\hline
+mobile\_scanner & Lecture du QR code par l'organisateur (web et Android) \\
+\hline
+Firebase Hosting & Déploiement de la version web \\
+\hline
+Git / GitHub & Versionnement et collaboration \\
+\hline
+\end{tabularx}
+\end{table}
+
+\subsection{Justification des choix}
+
+Nous avons choisi \textbf{Flutter} pour pouvoir cibler à la fois Android et le web avec un seul code ; cela évitait de développer deux applications séparées et gardait l'interface cohérente. \textbf{Firebase} était imposé dans le cadre du cours ; en pratique, l'authentification et Firestore étaient déjà prêts, ce qui nous a permis de nous concentrer sur la logique métier et l'interface. \textbf{Provider} nous a semblé le plus simple pour la gestion d'état et pour partager l'état (utilisateur connecté, rôle) entre les écrans. \textbf{GoRouter} permet de définir les routes clairement et de protéger certaines pages (dashboard, scan) selon le rôle. \textbf{Labyrinthe RDC} a été retenu pour respecter la contrainte d'API externe et pour offrir un flux de paiement Mobile Money adapté au contexte local.
+
+\subsection{Architecture et structure du code}
+
+L'application repose sur une architecture modulaire. Le point d'entrée est \texttt{lib/main.dart} : il initialise Firebase, enregistre les providers (AuthState, FirestoreService, LabyrinthePaymentService) et lance l'application avec \texttt{MaterialApp.router}. Le fichier \texttt{lib/app\_router.dart} définit toutes les routes : \texttt{/} (accueil), \texttt{/login}, \texttt{/register}, \texttt{/events}, \texttt{/events/:id}, \texttt{/events/:id/checkout}, \texttt{/my-tickets}, \texttt{/ticket/:id}, \texttt{/dashboard}, \texttt{/dashboard/scan}, \texttt{/dashboard/event/new}, \texttt{/dashboard/event/:id}. Les routes du tableau de bord sont protégées : une redirection envoie vers la page de connexion si l'utilisateur n'est pas connecté, ou vers l'accueil s'il n'a pas le rôle organisateur ou admin.
+
+Le dossier \texttt{lib/core/} contient les constantes (\texttt{app\_constants}, \texttt{api\_constants}), les modèles (\texttt{Event}, \texttt{Ticket}, \texttt{LikitaUser}), les services (auth, Firestore, paiement), l'état (\texttt{AuthState}), le thème et les widgets réutilisables. Le dossier \texttt{lib/features/} organise le code par fonctionnalité : \texttt{auth/} (connexion, inscription), \texttt{events/} (liste, détail, checkout), \texttt{tickets/} (mes billets, affichage du billet), \texttt{dashboard/} (tableau de bord, formulaire événement, scan), \texttt{home/} (page d'accueil).
+
+\subsection{Modèles de données et collections Firestore}
+
+Les données sont stockées dans Firestore. La collection \texttt{evenements} contient les événements (titre, description, date, lieu, capacité, ticketsSold, prix, imageUrl, organizerId, organizerName). La collection \texttt{reservations} contient les billets (eventId, participantName, participantEmail, ticketsCount, totalPaid, qrCodeData, paymentReference, reservationDate). La collection \texttt{users} stocke le profil et le rôle de chaque utilisateur (email, displayName, role : participant, organizer ou admin). Les modèles Dart \texttt{Event}, \texttt{Ticket} et \texttt{LikitaUser} reflètent ces structures.
+
+% ========== 4. FONCTIONNALITÉS ==========
+\section{Fonctionnalités principales}
+\label{sec:fonctionnalites}
+
+\subsection{Authentification et gestion des rôles}
+
+L'authentification est assurée par Firebase avec le mécanisme email + mot de passe. Lors de l'inscription, un document utilisateur est créé dans Firestore avec le rôle (par défaut : organizer). Le rôle est chargé au login via \texttt{AuthState} et détermine l'accès aux fonctionnalités : un utilisateur avec le rôle \texttt{participant} ne peut pas accéder au dashboard ni au scan ; seuls les rôles \texttt{organizer} et \texttt{admin} le peuvent. Les contrôles sont effectués à la fois dans l'état (\texttt{AuthState}), dans les redirections du routeur et dans l'affichage des liens de la barre de navigation.
+
+\subsection{Gestion des événements}
+
+Les organisateurs et administrateurs peuvent créer, modifier et supprimer des événements. Chaque événement comprend un titre, une description, une date, un lieu, une image (URL), une capacité maximale et un prix (en USD dans l'implémentation actuelle). Le nombre de billets vendus (\texttt{ticketsSold}) est mis à jour automatiquement à chaque nouvelle réservation. Les événements sont listés sur la page « Événements » (liste à venir) et affichés en détail sur une page dédiée avec un bouton « Acheter un billet ».
+
+\subsection{Réservations, paiement et billets}
+
+Lorsqu'un participant souhaite acheter des billets, il remplit un formulaire (nom, email, nombre de places ; si l'événement est payant, le numéro de téléphone est demandé pour le paiement Mobile Money). Pour un événement payant, l'application appelle l'API Labyrinthe (\texttt{initiateDeposit}) avec le montant en USD ; en cas de succès, une réservation est créée dans Firestore avec la référence de paiement, et le compteur \texttt{ticketsSold} de l'événement est incrémenté. Pour un événement gratuit, la réservation est créée directement. Chaque billet possède un identifiant unique et un code QR (généré avec \texttt{qr\_flutter}) ; le participant peut consulter son billet dans l'espace « Mes billets » (accessible par email).
+
+\subsection{Scan des billets et tableau de bord}
+
+L'organisateur peut vérifier les billets à l'entrée via l'écran « Scanner les billets ». Sur le web, la caméra du navigateur est utilisée (package \texttt{mobile\_scanner}, avec le script jsQR dans la page) ; sur Android, la caméra du téléphone est utilisée. En cas d'indisponibilité de la caméra, une saisie manuelle du code du billet est possible. Lorsqu'un code est reconnu ou saisi, l'application interroge Firestore pour retrouver le billet ; elle affiche alors un dialogue « Billet valide » (avec le nom du participant et l'événement) ou « Billet invalide ». Le tableau de bord organisateur affiche les statistiques (nombre d'événements, billets vendus, revenus en USD), la liste des événements avec possibilité de modification et suppression, et un bouton pour accéder au module de scan.
+
+% ========== 5. DÉPLOIEMENT, DIFFICULTÉS ET PERSPECTIVES ==========
+\section{Déploiement, difficultés et perspectives}
+\label{sec:deploiement}
+
+\subsection{Déploiement et livrables}
+
+La version web est générée par la commande \texttt{flutter build web} ; les fichiers produits dans \texttt{build/web/} sont déployés sur Firebase Hosting (projet \texttt{billetterieevent-a023d}, configuration dans \texttt{firebase.json}). La version Android est générée par \texttt{flutter build apk --release} ; un script \texttt{copy\_apk.bat} permet de copier l'APK vers \texttt{web/apk/} si besoin. Le lien de téléchargement de l'APK peut être configuré dans \texttt{lib/core/constants/app\_constants.dart} (constante \texttt{kApkDownloadUrl}). Les livrables du projet comprennent le code source Flutter, la version web déployée, l'APK Android, les maquettes et la présente monographie.
+
+\subsection{Difficultés rencontrées et solutions}
+
+Plusieurs difficultés techniques ont été rencontrées. \textbf{Index Firestore :} certaines requêtes (par exemple avec \texttt{orderBy} sur la date) exigeaient des index que nous n'avions pas créés ; l'application pouvait alors planter. Nous avons mis en place une fonction de repli \texttt{getUpcomingEventsSafe} qui, en cas d'échec, charge les événements sans tri avancé et effectue le tri en mémoire, ce qui permet à l'application de rester utilisable. \textbf{Scan multi-plateforme :} le scan devait fonctionner sur le web (caméra du navigateur) et sur Android. Nous avons utilisé \texttt{mobile\_scanner}, qui gère les deux plateformes ; sur le web, nous avons ajouté le script jsQR dans \texttt{index.html} et prévu une saisie manuelle du code en secours. \textbf{Rôles et navigation :} il fallait synchroniser correctement les données Firestore (\texttt{users}), l'état \texttt{AuthState} et les redirections GoRouter pour éviter les accès incohérents ; nous avons centralisé la logique dans \texttt{AuthState} et dans le redirect du routeur. \textbf{Paiement :} les premiers tests avec l'API Labyrinthe échouaient parfois (format de devise ou montant) ; nous avons tout passé en USD et amélioré l'affichage des messages d'erreur pour donner un feedback clair à l'utilisateur.
+
+\subsection{Limites et perspectives}
+
+La version actuelle de LikitaEvent ne gère pas les notifications (par exemple pour rappeler un événement), les filtres de recherche sont basiques, et il n'y a pas de mode hors ligne. Les règles de sécurité Firestore pourraient être renforcées. Pour les images des événements, nous utilisons une simple URL ; un upload direct vers Firebase Storage serait plus pratique pour les organisateurs. Pour la suite, nous envisagerions l'ajout de notifications, des filtres avancés (par date, lieu, prix), l'export des statistiques pour les organisateurs, d'autres moyens de paiement, le renforcement des règles Firestore et la possibilité d'uploader une image pour un événement.
+
+% ========== CONCLUSION ==========
+\section*{Conclusion}
+\addcontentsline{toc}{section}{Conclusion}
+
+En repensant à tout le parcours, nous pouvons dire que LikitaEvent nous a beaucoup appris. Partir d'une idée (simplifier la billetterie pour les événements) et arriver à une application qui tourne sur le web et sur Android, avec de vrais paiements et un scan de billets, ce n'était pas évident au départ. Le cours de Programmation mobile (L4 LMD) à l'Université Protestante au Congo nous avait donné les bases ; le projet nous a obligés à les mettre en pratique et à aller plus loin.
+
+Aujourd'hui, l'application permet de consulter des événements, d'acheter des billets (gratuits ou payants via Labyrinthe RDC), d'afficher un QR code sur chaque billet et de le vérifier à l'entrée. Les organisateurs disposent d'un tableau de bord et d'un module de scan utilisable sur le web et sur Android. Nous avons rencontré des difficultés, notamment sur les index Firestore, le scan multi-plateforme et l'intégration du paiement, mais à chaque fois nous avons trouvé des solutions en équipe. LikitaEvent reste perfectible (notifications, filtres, sécurité, etc.), mais nous en sommes fiers et pensons que c'est une bonne base pour montrer ce qu'on sait faire en programmation mobile. Ce document en résume le contenu et la démarche ; nous espérons qu'il reflète bien le travail de chaque membre du groupe.
+
+\end{document}
